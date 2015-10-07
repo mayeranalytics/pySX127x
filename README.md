@@ -69,7 +69,7 @@ are invoked on successful RX or TX operations, for example.
 class MyLoRa(LoRa):
 
   def __init__(self, verbose=False):
-    super(LoRaBeacon, self).__init__(verbose)
+    super(MyLoRa, self).__init__(verbose)
 
   def on_rx_done(self):
     payload = self.read_payload(nocheck=True) 
