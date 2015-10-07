@@ -19,7 +19,7 @@ Transceiver modules are usually interfaced with microcontroller boards such as t
 [Arduino](https://www.arduino.cc/) and there are already many fine C/C++ libraries for the SX128x family on 
 [github](https://github.com/search?q=sx127x) and [mbed.org](https://developer.mbed.org/search/?q=sx127x).
 
-Although C/C++ is the de facto standard for development on, [python](https://www.python.org)
+Although C/C++ is the de facto standard for development on microcontrollers, [python](https://www.python.org)
 running on a [Raspberry Pi](https://www.raspberrypi.org) is becoming a viable alternative for rapid prototyping.
 
 
