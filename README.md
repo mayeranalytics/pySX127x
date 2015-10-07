@@ -9,7 +9,7 @@ Spread spectrum modulation has a number of intriguing features:
 * High interference immunity
 * Up to 20dB link budget advantage
 * High Doppler shift immunity 
-For examples of achieved ranges see the [references](#References) below.
+For examples of achieved ranges see the [references](#references) below.
 
 
 # Motivation
