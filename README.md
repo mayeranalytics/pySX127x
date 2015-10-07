@@ -1,7 +1,7 @@
 # pySX127x.LoRa
 
 This is a python interface to the Semtech SX127x long range, low power transceiver family 
-[SX1272, SX1273, SX1276, SX1277, SX1278, SX1279}[http://www.semtech.com/wireless-rf/rf-transceivers/].
+[SX1272, SX1273, SX1276, SX1277, SX1278, SX1279](http://www.semtech.com/wireless-rf/rf-transceivers/).
 The SX127x has both [LoRa](https://lora-alliance.org) and FSK capabilities. Here the focus lies on the
 LoRa spread spectrum modulation. 
 
