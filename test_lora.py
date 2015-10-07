@@ -1,0 +1,90 @@
+#!/usr/bin/env python
+
+""" This script runs a small number of unit tests. """
+
+# This file is part of pySX127x.
+#
+# pySX127x is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# pySX127x is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with pySX127x.  If not, see <http://www.gnu.org/licenses/>.
+
+
+from SX127x.LoRa import *
+from SX127x.board_config import BOARD
+import unittest
+
+
+# setup board and create a global LoRa object
+BOARD.setup()
+lora = LoRa(verbose=False)
+
+
+def get_reg(reg_addr):
+    return lora.get_register(reg_addr)
+
+
+def SaveState(reg_addr, len=1):
+    """ This decorator wraps a get/set_register around the function (unittest) call. """
+    def decorator(func):
+        def wrapper(self):
+            reg_bkup = lora.get_register(reg_addr)
+            func(self)
+            lora.set_register(reg_addr, reg_bkup)
+        return wrapper
+    return decorator
+
+
+class TestSX127x(unittest.TestCase):
+
+    def test_setter_getter(self):
+        bkup = lora.get_payload_length()
+        for l in [1,50, 128, bkup]:
+            lora.set_payload_length(l)
+            self.assertEqual(lora.get_payload_length(), l)
+
+    @SaveState(REG.OP_MODE)
+    def test_mode(self):
+        mode = lora.get_mode()
+        for m in [MODE.STDBY, MODE.SLEEP, mode]:
+            lora.set_mode(m)
+            self.assertEqual(lora.get_mode(), m)
+
+    def test_set_freq(self):
+        freq = lora.get_freq()
+        for f in [433.5, 434.5, 434.0, freq]:
+            lora.set_freq(f)
+            self.assertEqual(lora.get_freq(), f)
+
+    @SaveState(REG.MODEM_CONFIG_3)
+    def test_set_agc_on(self):
+        lora.set_agc_auto_on(True)
+        self.assertEqual((get_reg(REG.MODEM_CONFIG_3) & 0b100) >> 2, 1)
+        lora.set_agc_auto_on(False)
+        self.assertEqual((get_reg(REG.MODEM_CONFIG_3) & 0b100) >> 2, 0)
+
+    @SaveState(REG.MODEM_CONFIG_3)
+    def test_set_low_data_rate_optim(self):
+        lora.set_low_data_rate_optim(True)
+        self.assertEqual((get_reg(REG.MODEM_CONFIG_3) & 0b1000) >> 3, 1)
+        lora.set_low_data_rate_optim(False)
+        self.assertEqual((get_reg(REG.MODEM_CONFIG_3) & 0b1000) >> 3, 0)
+
+    def test_set_lna_gain(self):
+        bkup_lna_gain = lora.get_lna()['lna_gain']
+        for target_gain in [GAIN.NOT_USED, GAIN.G1, GAIN.G2, GAIN.G6, GAIN.NOT_USED, bkup_lna_gain]:
+            print target_gain
+            lora.set_lna_gain(target_gain)
+            actual_gain = lora.get_lna()['lna_gain']
+            self.assertEqual(GAIN.lookup[actual_gain], GAIN.lookup[target_gain])
+
+if __name__ == '__main__':
+    unittest.main()
