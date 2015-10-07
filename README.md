@@ -68,19 +68,19 @@ are invoked on successful RX or TX operations, for example.
 ```python
 class MyLoRa(LoRa):
 
-def __init__(self, verbose=False):
-super(LoRaBeacon, self).__init__(verbose)
+  def __init__(self, verbose=False):
+    super(LoRaBeacon, self).__init__(verbose)
 
-def on_rx_done(self):
-payload = self.read_payload(nocheck=True) 
-# etc.
+  def on_rx_done(self):
+    payload = self.read_payload(nocheck=True) 
+    # etc.
 ```
 
 
 # Installation
 
 **pySX127x** requires 
-* [RPi.GPIO](href="https://pypi.python.org/pypi/RPi.GPIO">) for accessing the GPIOs and
+* [RPi.GPIO](https://pypi.python.org/pypi/RPi.GPIO") for accessing the GPIOs and
 * [spidev](https://pypi.python.org/pypi/spidev) for controlling SPI
 
 
@@ -131,7 +131,7 @@ but **WITHOUT ANY WARRANTY**; without even the implied warranty of
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with **pySX127x**.  If not, see [http://www.gnu.org/licenses/].
+along with **pySX127x**.  If not, see <http://www.gnu.org/licenses/>.
 
 
 # References
