@@ -1,8 +1,8 @@
 # pySX127x.LoRa
 
 This is a python interface to the Semtech SX127x long range, low power transceiver family 
-(SX1272, SX1273, SX1276, SX1277, SX1278, SX1279)[http://www.semtech.com/wireless-rf/rf-transceivers/].
-The SX127x has both (LoRa)[https://lora-alliance.org] and FSK capabilities. Here the focus lies on the
+[SX1272, SX1273, SX1276, SX1277, SX1278, SX1279}[http://www.semtech.com/wireless-rf/rf-transceivers/].
+The SX127x has both [LoRa](https://lora-alliance.org) and FSK capabilities. Here the focus lies on the
 LoRa spread spectrum modulation. 
 
 Spread spectrum modulation has a number of intriguing features:
@@ -15,17 +15,17 @@ For examples of achieved ranges see the [references](#References) below.
 # Motivation
 
 Transceiver modules are usually interfaced with microcontroller boards such as the 
-(Arduino)[https://www.arduino.cc/] and there are already many fine C/C++ libraries for the SX128x family on 
-(github)[https://github.com/search?q=sx127x] and (mbed.org)[https://developer.mbed.org/search/?q=sx127x].
+[Arduino](https://www.arduino.cc/) and there are already many fine C/C++ libraries for the SX128x family on 
+[github](https://github.com/search?q=sx127x) and [mbed.org](https://developer.mbed.org/search/?q=sx127x).
 
-Although C/C++ is the de facto standard for development on, (python)[https://www.python.org] 
-running on a (Raspberry Pi)[https://www.raspberrypi.org] is becoming a viable alternative for rapid prototyping.
+Although C/C++ is the de facto standard for development on, [python](https://www.python.org)
+running on a [Raspberry Pi](https://www.raspberrypi.org) is becoming a viable alternative for rapid prototyping.
 
 
 # Hardware
 
-The transceiver module is a SX1276 based Modtronix (inAir9B)[http://modtronix.com/inair9.html]. 
-It is mounted on a prototyping board to a (Raspberry Pi)[https://www.raspberrypi.org] rev 2 model B.
+The transceiver module is a SX1276 based Modtronix [inAir9B](http://modtronix.com/inair9.html). 
+It is mounted on a prototyping board to a [Raspberry Pi](https://www.raspberrypi.org) rev 2 model B.
 
 |  board pin   | RaspPi GPIO | Direction |
 |:-------------|:-----------:|:---------:|
@@ -108,9 +108,9 @@ Execute `test_lora.py` to run a few unit tests.
 
 Please feel free to comment, report issues, or even contribute!
 
-Check out my company website (Mayer Analytics)[http://mayeranalytics.com] and my private blog
-(mcmayer.net)[http://mcmayer.net]. Follow me on twitter (@markuscmayer)[https://twitter.com/markuscmayer] and
-(@mayeranalytics)[https://twitter.com/mayeranalytics].
+Check out my company website [Mayer Analytics](http://mayeranalytics.com) and my private blog
+[mcmayer.net](http://mcmayer.net). Follow me on twitter [@markuscmayer](https://twitter.com/markuscmayer) and
+[@mayeranalytics](https://twitter.com/mayeranalytics).
 
 
 # Version
@@ -135,4 +135,5 @@ along with **pySX127x**.  If not, see [http://www.gnu.org/licenses/].
 
 
 # References
-[Extreme Range Links: LoRa 868 / 900MHz SX1272 LoRa module for Arduino, Raspberry Pi and Intel Galileo](https://www.cooking-hacks.com/documentation/tutorials/extreme-range-lora-sx1272-module-shield-arduino-raspberry-pi-intel-galileo/)
+### Range Experiments
+* [Extreme Range Links: LoRa 868 / 900MHz SX1272 LoRa module for Arduino, Raspberry Pi and Intel Galileo](https://www.cooking-hacks.com/documentation/tutorials/extreme-range-lora-sx1272-module-shield-arduino-raspberry-pi-intel-galileo/)
