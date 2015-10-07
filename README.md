@@ -8,7 +8,8 @@ LoRa spread spectrum modulation.
 Spread spectrum modulation has a number of intriguing features:
 * High interference immunity
 * Up to 20dB link budget advantage
-* High Doppler shift immunity 
+* High Doppler shift immunity
+
 For examples of achieved ranges see the [references](#references) below.
 
 
