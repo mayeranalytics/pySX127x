@@ -28,60 +28,61 @@ BOARD.setup()
 
 parser = LoRaArgumentParser("A simple LoRa beacon")
 parser.add_argument('--single', '-S', dest='single', default=False, action="store_true", help="Single transmission")
-parser.add_argument('--wait', '-w', dest='wait', default=0, action="store", type=float, help="Waiting time between transmissions (default is 0s)")
+parser.add_argument('--wait', '-w', dest='wait', default=1, action="store", type=float, help="Waiting time between transmissions (default is 0s)")
 
 
 class LoRaBeacon(LoRa):
 
     def __init__(self, verbose=False):
         super(LoRaBeacon, self).__init__(verbose)
+        self.set_mode(MODE.SLEEP)
+        self.set_dio_mapping([1,0,0,0,0,0])
 
     def on_rx_done(self):
         print "\nRxDone"
-        print lora.get_irq_flags()
-        print map(hex, lora.read_payload(nocheck=True))
-        lora.set_mode(MODE.SLEEP)
-        lora.reset_ptr_rx()
-        lora.set_mode(MODE.RXCONT)
+        print self.get_irq_flags()
+        print map(hex, self.read_payload(nocheck=True))
+        self.set_mode(MODE.SLEEP)
+        self.reset_ptr_rx()
+        self.set_mode(MODE.RXCONT)
 
     def on_tx_done(self):
         print "\nTxDone"
-        print lora.get_irq_flags()
+        print self.get_irq_flags()
 
     def on_cad_done(self):
         print "\non_CadDone";
-        print lora.get_irq_flags()
+        print self.get_irq_flags()
 
     def on_rx_timeout(self):
         print "\non_RxTimeout"
-        print lora.get_irq_flags()
+        print self.get_irq_flags()
 
     def on_valid_header(self):
         print "\non_ValidHeader"
-        print lora.get_irq_flags()
+        print self.get_irq_flags()
 
     def on_payload_crc_error(self):
         print "\non_PayloadCrcError"
-        print lora.get_irq_flags()
+        print self.get_irq_flags()
 
     def on_fhss_change_channel(self):
         print "\non_FhssChangeChannel"
-        print lora.get_irq_flags()
+        print self.get_irq_flags()
 
     def start(self):
         global args
-        self.set_dio_mapping_1(0b01000000)
         counter = 0
         while True:
-            lora.write_payload([0x0f])
+            self.write_payload([0x0f])
             BOARD.led_on()
-            lora.set_mode(MODE.TX)
+            self.set_mode(MODE.TX)
             counter += 1
             sys.stdout.flush()
             sys.stdout.write("\rtx #%d" % counter)
             tx_done = False
             while not tx_done:
-                tx_done = lora.get_irq_flags()['tx_done']
+                tx_done = self.get_irq_flags()['tx_done']
                 BOARD.led_off()
             if args.single:
                 break
@@ -107,8 +108,9 @@ print lora
 #assert(lora.get_lna()['lna_gain'] == GAIN.NOT_USED)
 assert(lora.get_agc_auto_on() == 1)
 
-print "simple_beacon parameters:"
-print "  Wait\t%f s" % args.wait
+print "Beacon config:"
+print "  Wait %f s" % args.wait
+print "  Single tx = %s" % args.single
 print
 raw_input("Press enter to start...")
 

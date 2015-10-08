@@ -24,10 +24,11 @@ from board_config import BOARD
 
 def set_bit(v, index, bit):
     """ Set the index:th bit of v to x, and return the new value.
-    :param v: The integer to set the bit in
+    :param v:   The integer to set the bit in
+    :type v:    int
     :param index: 0-based index
     :param bit: bit to set (0 or 1)
-    :return: Changed integer
+    :return:    Changed integer
     """
     mask = 1 << index
     v &= ~mask
@@ -101,6 +102,8 @@ class LoRa(object):
     def on_fhss_change_channel(self):
         pass
 
+    # Internal callbacks for GPIO.add_event_detect
+
     def _dio0(self, channel):
         # DIO0 00: RxDone
         # DIO0 01: TxDone
@@ -148,12 +151,21 @@ class LoRa(object):
         else:
             raise RuntimeError("unknown dio3 mapping!")
 
+    # All the set/get/read/write functions
+
     def get_mode(self):
+        """ Get the mode
+        :return:    New mode
+        """
         self.mode = self.spi.xfer([REG.OP_MODE, 0])[1]
         return self.mode
 
     def set_mode(self, mode):
-        # the mode is backe up in self.mode
+        """
+        :param mode: Set the mode. Use constants.MODE class
+        :return:    New mode
+        """
+        # the mode is backed up in self.mode
         if mode == self.mode:
             return mode
         if self.verbose:
@@ -162,22 +174,35 @@ class LoRa(object):
         return self.spi.xfer([REG.OP_MODE | 0x80, mode])[1]
 
     def write_payload(self, payload):
+        """ Get FIFO ready for TX: Set FifoAddrPtr to FifoTxBaseAddr. The transceiver is put into STDBY mode.
+        :param payload: Payload to write (list)
+        :return:    Written payload
+        """
         self.set_mode(MODE.STDBY)
         base_addr = self.get_fifo_tx_base_addr()
         self.set_fifo_addr_ptr(base_addr)
         return self.spi.xfer([REG.FIFO | 0x80] + payload)[1:]
 
     def reset_ptr_rx(self):
-        """ Get FIFO ready for RX: Set FifoAddrPtr to FifoRxBaseAddr """
+        """ Get FIFO ready for RX: Set FifoAddrPtr to FifoRxBaseAddr. The transceiver is put into STDBY mode. """
         self.set_mode(MODE.STDBY)
         base_addr = self.get_fifo_rx_base_addr()
         self.set_fifo_addr_ptr(base_addr)
 
     def rx_is_good(self):
+        """ Check the IRQ flags for RX errors
+        :return: True if no errors
+        :rtype: bool
+        """
         flags = self.get_irq_flags()
         return not any([flags[s] for s in ['valid_header', 'crc_error', 'rx_done', 'rx_timeout']])
 
     def read_payload(self , nocheck = False):
+        """ Read the payload from FIFO
+        :param nocheck: If True then check rx_is_good()
+        :return: Payload
+        :rtype: list[int]
+        """
         if not nocheck and not self.rx_is_good():
             return None
         rx_nb_bytes = self.get_rx_nb_bytes()
@@ -187,13 +212,21 @@ class LoRa(object):
         return payload
 
     def get_freq(self):
-        # returns freq in MHz
+        """ Get the frequency (MHz)
+        :return:    Frequency in MHz
+        :rtype:     float
+        """
         msb, mid, lsb = self.spi.xfer([REG.FR_MSB, 0, 0, 0])[1:]
         f = lsb + 256*(mid + 256*msb)
         return f / 16384.
 
     def set_freq(self, f):
-        # f is a float in MHz
+        """ Set the frequency (MHz)
+        :param f: Frequency in MHz
+        "type f: float
+        :return: New register settings (3 bytes [msb, mid, lsb])
+        :rtype: list[int]
+        """
         assert self.mode == MODE.SLEEP or self.mode == MODE.STDBY
         i = int(f * 16384.)    # choose floor
         msb = i // 65536
@@ -201,7 +234,7 @@ class LoRa(object):
         mid = i // 256
         i -= mid * 256
         lsb = i
-        self.spi.xfer([REG.FR_MSB | 0x80, msb, mid, lsb])
+        return self.spi.xfer([REG.FR_MSB | 0x80, msb, mid, lsb])
 
     def get_pa_config(self, convert_dBm=False):
         v = self.spi.xfer([REG.PA_CONFIG, 0])[1]
@@ -218,7 +251,8 @@ class LoRa(object):
             )
 
     def set_pa_config(self, pa_select=None, max_power=None, output_power=None):
-        assert pa_select is None or pa_select == 0    # the inAir9 uses the RFO pin, so I don't allow to switch to PA_BOOST
+        # the inAir9 uses the RFO pin, so I don't allow to switch to PA_BOOST
+        assert pa_select is None or pa_select == 0
         loc = locals()
         current = self.get_pa_config()
         loc = {s: current[s] if loc[s] is None else loc[s] for s in loc}
@@ -323,8 +357,9 @@ class LoRa(object):
                 cad_detected   = v >> 0 & 0x01,
             )
 
-    def set_irq_flags_mask(self, rx_timeout=None, rx_done=None, crc_error=None, valid_header=None, tx_done=None,
-                   cad_done=None, fhss_change_ch=None, cad_detected=None):
+    def set_irq_flags_mask(self,
+                           rx_timeout=None, rx_done=None, crc_error=None, valid_header=None, tx_done=None,
+                           cad_done=None, fhss_change_ch=None, cad_detected=None):
         loc = locals()
         v = self.spi.xfer([REG.IRQ_FLAGS_MASK, 0])[1]
         for i, s in enumerate(['cad_detected', 'fhss_change_ch', 'cad_done', 'tx_done', 'valid_header',
@@ -347,8 +382,9 @@ class LoRa(object):
                 cad_detected   = v >> 0 & 0x01,
             )
 
-    def set_irq_flags(self, rx_timeout=None, rx_done=None, crc_error=None, valid_header=None, tx_done=None,
-                   cad_done=None, fhss_change_ch=None, cad_detected=None):
+    def set_irq_flags(self,
+                      rx_timeout=None, rx_done=None, crc_error=None, valid_header=None, tx_done=None,
+                      cad_done=None, fhss_change_ch=None, cad_detected=None):
         v = self.spi.xfer([REG.IRQ_FLAGS, 0])[1]
         for i, s in enumerate(['cad_detected', 'fhss_change_ch', 'cad_done', 'tx_done', 'valid_header',
                                'crc_error', 'rx_done', 'rx_timeout']):
@@ -555,49 +591,133 @@ class LoRa(object):
 
     @Getter(REG.DIO_MAPPING_1)
     def get_dio_mapping_1(self, mapping):
-        self.dio_mapping = [mapping>>6 & 0x03, mapping>>4 & 0x03, mapping>>2 & 0x03, mapping>>0 & 0x03] + self.dio_mapping[4:6]
-        return mapping
+        """ Get mapping of pins DIO0 to DIO3. Object variable dio_mapping will be set.
+        :param mapping: Register value
+        :type mapping: int
+        :return: Value of the mapping list
+        :rtype: list[int]
+        """
+        self.dio_mapping = [mapping>>6 & 0x03, mapping>>4 & 0x03, mapping>>2 & 0x03, mapping>>0 & 0x03] \
+                           + self.dio_mapping[4:6]
+        return self.dio_mapping
 
     @Setter(REG.DIO_MAPPING_1)
     def set_dio_mapping_1(self, mapping):
-        self.dio_mapping = [mapping>>6 & 0x03, mapping>>4 & 0x03, mapping>>2 & 0x03, mapping>>0 & 0x03] + self.dio_mapping[4:6]
+        """ Set mapping of pins DIO0 to DIO3. Object variable dio_mapping will be set.
+        :param mapping: Register value
+        :type mapping: int
+        :return: New value of the register
+        :rtype: int
+        """
+        self.dio_mapping = [mapping>>6 & 0x03, mapping>>4 & 0x03, mapping>>2 & 0x03, mapping>>0 & 0x03] \
+                           + self.dio_mapping[4:6]
         return mapping
 
     @Getter(REG.DIO_MAPPING_2)
     def get_dio_mapping_2(self, mapping):
+        """ Get mapping of pins DIO4 to DIO5. Object variable dio_mapping will be set.
+        :param mapping: Register value
+        :type mapping: int
+        :return: Value of the mapping list
+        :rtype: list[int]
+        """
         self.dio_mapping = self.dio_mapping[0:4] + [mapping>>6 & 0x03, mapping>>4 & 0x03]
-        return mapping
+        return self.dio_mapping
 
     @Setter(REG.DIO_MAPPING_2)
     def set_dio_mapping_2(self, mapping):
+        """ Set mapping of pins DIO4 to DIO5. Object variable dio_mapping will be set.
+        :param mapping: Register value
+        :type mapping: int
+        :return: New value of the register
+        :rtype: int
+        """
         assert mapping & 0b00001110 == 0
         self.dio_mapping = self.dio_mapping[0:4] + [mapping>>6 & 0x03, mapping>>4 & 0x03]
         return mapping
 
+    def get_dio_mapping(self):
+        """ Utility function that returns the list of current DIO mappings. Object variable dio_mapping will be set.
+        :return: List of current DIO mappings
+        :rtype: list[int]
+        """
+        self.get_dio_mapping_1()
+        return self.get_dio_mapping_2()
+
+    def set_dio_mapping(self, mapping):
+        """ Utility function that returns the list of current DIO mappings. Object variable dio_mapping will be set.
+        :param mapping: DIO mapping list
+        :type mapping: list[int]
+        :return: New DIO mapping list
+        :rtype: list[int]
+        """
+        mapping_1 = (mapping[0] & 0x03) << 6 | (mapping[1] & 0x03) << 4 | (mapping[2] & 0x3) << 2 | mapping[3] & 0x3
+        mapping_2 = (mapping[4] & 0x03) << 6 | (mapping[5] & 0x03) << 4
+        self.set_dio_mapping_1(mapping_1)
+        return self.set_dio_mapping_2(mapping_2)
+
     @Getter(REG.VERSION)
     def get_version(self, version):
+        """ Version code of the chip.
+            Bits 7-4 give the full revision number; bits 3-0 give the metal mask revision number.
+        :return: Version code
+        :rtype: int
+        """
         return version
 
     @Getter(REG.TCXO)
     def get_tcxo(self, tcxo):
-        return tcxo
+        """ Get TCXO or XTAL input setting
+            0 -> "XTAL": Crystal Oscillator with external Crystal
+            1 -> "TCXO": External clipped sine TCXO AC-connected to XTA pin
+        :param tcxo: 1=TCXO or 0=XTAL input setting
+        :return: TCXO or XTAL input setting
+        :type: int (0 or 1)
+        """
+        return tcxo & 0b00010000
 
     @Setter(REG.TCXO)
     def set_tcxo(self, tcxo):
-        assert tcxo & 0b11101111 == 0b00001001
-        return tcxo
+        """ Make TCXO or XTAL input setting.
+            0 -> "XTAL": Crystal Oscillator with external Crystal
+            1 -> "TCXO": External clipped sine TCXO AC-connected to XTA pin
+        :param tcxo: 1=TCXO or 0=XTAL input setting
+        :return: new TCXO or XTAL input setting
+        """
+        return (tcxo >= 1) << 4 | 0x09      # bits 0-3 must be 0b1001
 
     @Getter(REG.PA_DAC)
     def get_pa_dac(self, pa_dac):
-        return pa_dac
+        """ Enables the +20dBm option on PA_BOOST pin
+            False -> Default value
+            True  -> +20dBm on PA_BOOST when OutputPower=1111
+        :return: True/False if +20dBm option on PA_BOOST on/off
+        :rtype: bool
+        """
+        pa_dac &= 0x07      # only bits 0-2
+        if pa_dac == 0x04:
+            return False
+        elif pa_dac == 0x07:
+            return True
+        else:
+            raise RuntimeError("Bad PA_DAC value %s" % hex(pa_dac))
 
     @Setter(REG.PA_DAC)
     def set_pa_dac(self, pa_dac):
-        assert pa_dac & 0b1111100 == 0b00010000
-        return pa_dac
+        """ Enables the +20dBm option on PA_BOOST pin
+            False -> Default value
+            True  -> +20dBm on PA_BOOST when OutputPower=1111
+        :param pa_dac: 1/0 if +20dBm option on PA_BOOST on/off
+        :return: New pa_dac register value
+        :rtype: int
+        """
+        return 0x87 if pa_dac else 0x84
 
     def dump_registers(self):
-        # returns a list of [reg_addr, reg_name, reg_value] tuples
+        """ Returns a list of [reg_addr, reg_name, reg_value] tuples. Chip is put into mode SLEEP.
+        :return: List of [reg_addr, reg_name, reg_value] tuples
+        :rtype: list[tuple]
+        """
         self.set_mode(MODE.SLEEP)
         values = self.get_all_registers()
         skip_set = set([REG.FIFO])
@@ -678,17 +798,15 @@ class LoRa(object):
         s += " detect_optimize    %#02x\n" % self.get_detect_optimize()
         s += " detection_thresh   %#02x\n" % self.get_detection_threshold()
         s += " sync_word          %#02x\n" % self.get_sync_word()
-        s += " dio_mapping_1      %#02x\n" % self.get_dio_mapping_1()
-        s += " dio_mapping_2      %#02x\n" % self.get_dio_mapping_2()
-        s += " tcxo               %#02x\n" % self.get_tcxo()
-        s += " pa_dac             %#02x\n" % self.get_pa_dac()
+        s += " dio_mapping 0..5   %s\n" % self.get_dio_mapping()
+        s += " tcxo               %s\n" % ['XTAL', 'TCXO'][self.get_tcxo()]
+        s += " pa_dac             %s\n" % ['default', 'PA_BOOST'][self.get_pa_dac()]
         s += " fifo_addr_ptr      %#02x\n" % self.get_fifo_addr_ptr()
         s += " fifo_tx_base_addr  %#02x\n" % self.get_fifo_tx_base_addr()
         s += " fifo_rx_base_addr  %#02x\n" % self.get_fifo_rx_base_addr()
         s += " fifo_rx_curr_addr  %#02x\n" % self.get_fifo_rx_current_addr()
         s += " fifo_rx_byte_addr  %#02x\n" % self.get_fifo_rx_byte_addr()
         s += " status             %s\n" % self.get_modem_status()
-        s += " dio_mapping        %s\n" % self.dio_mapping
         s += " version            %#02x\n" % self.get_version()
         return s
 

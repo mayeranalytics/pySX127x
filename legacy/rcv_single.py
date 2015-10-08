@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2.7
 
 # This file is part of pySX127x.
 #
@@ -14,6 +14,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with pySX127x.  If not, see <http://www.gnu.org/licenses/>.
+
 
 from time import sleep
 from SX127x.LoRa import *

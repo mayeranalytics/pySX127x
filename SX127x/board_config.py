@@ -38,7 +38,7 @@ class BOARD:
         GPIO.output(BOARD.LED, 0)
         # DIOx
         for gpio_pin in [BOARD.DIO0, BOARD.DIO1, BOARD.DIO2, BOARD.DIO3]:
-            GPIO.setup(gpio_pin, GPIO.IN)
+            GPIO.setup(gpio_pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
     @staticmethod
     def led_on(value=1):

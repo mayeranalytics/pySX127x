@@ -1,7 +1,6 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2.7
 
-""" This is utility script for the LoRa. It dumps all registers. """
-
+""" This is a utility script for the SX127x (LoRa mode). It dumps all registers. """
 
 # This file is part of pySX127x.
 #

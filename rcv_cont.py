@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2.7
 
 """ A simple continuous receiver class. """
 
@@ -18,7 +18,6 @@
 # along with pySX127x.  If not, see <http://www.gnu.org/licenses/>.
 
 
-import sys
 from time import sleep
 from SX127x.LoRa import *
 from SX127x.LoRaArgumentParser import LoRaArgumentParser
@@ -32,48 +31,50 @@ parser = LoRaArgumentParser("Continous receiver")
 class LoRaRcvCont(LoRa):
     def __init__(self, verbose=False):
         super(LoRaRcvCont, self).__init__(verbose)
+        self.set_mode(MODE.SLEEP)
+        self.set_dio_mapping([0] * 6)
 
     def on_rx_done(self):
         BOARD.led_on()
         print "\nRxDone"
-        print lora.get_irq_flags()
-        print map(hex, lora.read_payload(nocheck=True))
-        lora.set_mode(MODE.SLEEP)
-        lora.reset_ptr_rx()
+        print self.get_irq_flags()
+        print map(hex, self.read_payload(nocheck=True))
+        self.set_mode(MODE.SLEEP)
+        self.reset_ptr_rx()
         BOARD.led_off()
-        lora.set_mode(MODE.RXCONT)
+        self.set_mode(MODE.RXCONT)
 
     def on_tx_done(self):
         print "\nTxDone"
-        print lora.get_irq_flags()
+        print self.get_irq_flags()
 
     def on_cad_done(self):
         print "\non_CadDone";
-        print lora.get_irq_flags()
+        print self.get_irq_flags()
 
     def on_rx_timeout(self):
         print "\non_RxTimeout"
-        print lora.get_irq_flags()
+        print self.get_irq_flags()
 
     def on_valid_header(self):
         print "\non_ValidHeader"
-        print lora.get_irq_flags()
+        print self.get_irq_flags()
 
     def on_payload_crc_error(self):
         print "\non_PayloadCrcError"
-        print lora.get_irq_flags()
+        print self.get_irq_flags()
 
     def on_fhss_change_channel(self):
         print "\non_FhssChangeChannel"
-        print lora.get_irq_flags()
+        print self.get_irq_flags()
 
     def start(self):
-        lora.reset_ptr_rx()
-        lora.set_mode(MODE.RXCONT)
+        self.reset_ptr_rx()
+        self.set_mode(MODE.RXCONT)
         while True:
             sleep(.5)
-            rssi_value = lora.get_rssi_value()
-            status = lora.get_modem_status()
+            rssi_value = self.get_rssi_value()
+            status = self.get_modem_status()
             sys.stdout.flush()
             sys.stdout.write("\r%d %d %d" % (rssi_value, status['rx_ongoing'], status['modem_clear']))
 
