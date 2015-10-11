@@ -193,7 +193,8 @@ optional arguments:
                         Coding rate (one of CR4_5 CR4_6 CR4_7 CR4_8). Default
                         is CR4_5.
   --preamble PREAMBLE, -p PREAMBLE
-                        Preamble length. Default is 8.```
+                        Preamble length. Default is 8.
+```
 
 ### Simple LoRa beacon `tx_beacon.py`
 A small payload is transmitted in regular intervals.
