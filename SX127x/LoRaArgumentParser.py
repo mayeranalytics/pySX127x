@@ -31,19 +31,22 @@ class LoRaArgumentParser(argparse.ArgumentParser):
     """
 
     bw_lookup = dict(BW7_8=0, BW10_4=1, BW15_6=2, BW20_8=3, BW31_25=4, BW41_7=5, BW62_5=6, BW125=7, BW250=8, BW500=9)
+    cr_lookup = dict(CR4_5=1, CR4_6=2,CR4_7=3,CR4_8=4)
 
     def __init__(self, description):
         argparse.ArgumentParser.__init__(self, description)
         self.add_argument('--ocp', '-c', dest='ocp', default=100, action="store", type=float,
                           help="Over current protection in mA (45 .. 240 mA)")
-        self.add_argument('--sf', '-s', dest='sf', default=6, action="store", type=int,
-                          help="Spreading factor (6...12)")
+        self.add_argument('--sf', '-s', dest='sf', default=7, action="store", type=int,
+                          help="Spreading factor (6...12). Default is 7.")
         self.add_argument('--freq', '-f', dest='freq', default=869., action="store", type=float,
                           help="Frequency")
-        self.add_argument('--bw', '-b', dest='bw', default='BW62_5', action="store", type=str,
-                          help="Bandwidth (one of BW7_8 BW10_4 BW15_6 BW20_8 BW31_25 BW41_7 BW62_5 BW125 BW250 BW500)")
+        self.add_argument('--bw', '-b', dest='bw', default='BW125', action="store", type=str,
+                          help="Bandwidth (one of BW7_8 BW10_4 BW15_6 BW20_8 BW31_25 BW41_7 BW62_5 BW125 BW250 BW500).\nDefault is BW125.")
+        self.add_argument('--cr', '-r', dest='coding_rate', default='CR4_5', action="store", type=str,
+                          help="Coding rate (one of CR4_5 CR4_6 CR4_7 CR4_8).\nDefault is CR4_5.")
         self.add_argument('--preamble', '-p', dest='preamble', default=8, action="store", type=int,
-                          help="Preamble length")
+                          help="Preamble length. Default is 8.")
 
     def parse_args(self, lora):
         """ Parse the args, perform some sanity checks and configure the LoRa accordingly.
@@ -52,13 +55,16 @@ class LoRaArgumentParser(argparse.ArgumentParser):
         """
         args = argparse.ArgumentParser.parse_args(self)
         args.bw = self.bw_lookup.get(args.bw, None)
+        args.coding_rate = self.cr_lookup.get(args.coding_rate, None)
         # some sanity checks
         assert(args.bw is not None)
+        assert(args.coding_rate is not None)
         assert(args.sf >=6 and args.sf <= 12)
         # set the LoRa object
         lora.set_freq(args.freq)
         lora.set_preamble(args.preamble)
         lora.set_spreading_factor(args.sf)
         lora.set_bw(args.bw)
+        lora.set_coding_rate(args.coding_rate)
         lora.set_ocp_trim(args.ocp)
         return args
