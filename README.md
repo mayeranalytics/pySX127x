@@ -1,33 +1,36 @@
-# pySX127x.LoRa
+# Overview
 
-This is a python interface to the Semtech SX127x long range, low power transceiver family 
-[SX1272, SX1273, SX1276, SX1277, SX1278, SX1279](http://www.semtech.com/wireless-rf/rf-transceivers/).
-The SX127x has both [LoRa](https://lora-alliance.org) and FSK capabilities. Here the focus lies on the
-LoRa spread spectrum modulation. 
+This is a python interface to the [Semtech SX127x](http://www.semtech.com/wireless-rf/rf-transceivers/) 
+long range, low power transceiver family.
+
+The SX127x has both LoRa and FSK capabilities. Here the focus lies on the
+LoRa spread spectrum modulation hence only the LoRa modem interface is implemented so far 
+(but see the [roadmap](#roadmap) below for future plans).
 
 Spread spectrum modulation has a number of intriguing features:
 * High interference immunity
 * Up to 20dBm link budget advantage (for the SX1276/7/8/9)
 * High Doppler shift immunity
 
+More information about LoRa can be found on the [LoRa Alliance website](https://lora-alliance.org).
 Links to some LoRa performance reports can be found in the [references](#references) section below.
 
 
 # Motivation
 
 Transceiver modules are usually interfaced with microcontroller boards such as the 
-[Arduino](https://www.arduino.cc/) and there are already many fine C/C++ libraries for the SX127x family on 
+Arduino and there are already many fine C/C++ libraries for the SX127x family available on 
 [github](https://github.com/search?q=sx127x) and [mbed.org](https://developer.mbed.org/search/?q=sx127x).
 
 Although C/C++ is the de facto standard for development on microcontrollers, [python](https://www.python.org)
-running on a [Raspberry Pi](https://www.raspberrypi.org) is becoming a viable alternative for rapid prototyping.
+running on a Raspberry Pi is becoming a viable alternative for rapid prototyping.
 
-High level programming languages like python require a full-blown OS like Linux. (There are some exceptions like
+High level programming languages like python require a full-blown OS such as Linux. (There are some exceptions like
 [PyMite](https://wiki.python.org/moin/PyMite) and most notably [MicroPython](https://micropython.org).)
-Using hardware capable of running Linux contradicts, to some extent, the low power specification of the SX127x family.
-Therefore it is clear that in most cases this approach is useful mostly for prototyping and technology testing.
+But using hardware capable of running Linux contradicts, to some extent, the low power specification of the SX127x family.
+Therefore it is clear that this approach aims mostly at prototyping and technology testing.
 
-On the other hand prototyping on a full-blown OS using high level programming languages has several advantages:
+Prototyping on a full-blown OS using high level programming languages has several clear advantages:
 * Working prototypes can be built quickly 
 * Technology testing ist faster
 * Proof of concept is easier to achieve
@@ -41,11 +44,13 @@ It is mounted on a prototyping board to a Raspberry Pi rev 2 model B.
 
 | Proto board pin | RaspPi GPIO | Direction |
 |:----------------|:-----------:|:---------:|
-| inAir9B DIO0    | GPIO 21     |    IN     |
-| inAir9B DIO1    | GPIO 22     |    IN     |
-| inAir9B DIO2    | GPIO 23     |    IN     |
-| inAir9B DIO3    | GPIO 24     |    IN     |
-| LED             | GPIO 25     |    OUT    |
+| inAir9B DIO0    | GPIO 22     |    IN     |
+| inAir9B DIO1    | GPIO 23     |    IN     |
+| inAir9B DIO2    | GPIO 24     |    IN     |
+| inAir9B DIO3    | GPIO 25     |    IN     |
+| inAir9b Reset   | GPIO ?      |    OUT    |
+| LED             | GPIO 18     |    OUT    |
+| Switch          | GPIO 4      |    IN     |
 
 Todo:
 - [ ] Add picture(s)
@@ -54,6 +59,7 @@ Todo:
 
 # Code Examples
 
+### Overview
 First import the modules 
 ```python
 from SX127x.LoRa import *
@@ -91,27 +97,126 @@ class MyLoRa(LoRa):
     # etc.
 ```
 
-
-# Installation
-
-**pySX127x** requires 
-* [RPi.GPIO](https://pypi.python.org/pypi/RPi.GPIO") for accessing the GPIOs and
-* [spidev](https://pypi.python.org/pypi/spidev) for controlling SPI
-
-
-# Class Reference
+### More details
+Most functions of `SX127x.Lora` are setter and getter functions. For example, the setter and getter for 
+the coding rate are demonstrated here
+```python 
+print lora.get_coding_rate()                # print the current coding rate
+lora.set_coding_rate(CODING_RATE.CR4_6)     # set it to CR4_6
+```
 
 @todo
 
 
-# Script reference
+# Installation
 
-### `rcv_cont.py`
+Make sure SPI is activated on you RaspberryPi: [SPI](https://www.raspberrypi.org/documentation/hardware/raspberrypi/spi/README.md)
+**pySX127x** requires these two python packages:
+* [RPi.GPIO](https://pypi.python.org/pypi/RPi.GPIO") for accessing the GPIOs, it should be already installed on
+  a standard Raspian Linux image
+* [spidev](https://pypi.python.org/pypi/spidev) for controlling SPI
+
+In order to install spidev download the source code and run setup.py manually:
+```bash
+wget https://pypi.python.org/packages/source/s/spidev/spidev-3.1.tar.gz
+tar xfvz  spidev-3.1.tar.gz
+cd spidev-3.1
+sudo python setup.py install
+```
+
+At this point you may want to confirm that the unit tests pass. See the section [Tests](#tests) below.
+
+You can now run the scripts. For example dump the registers with `lora_util.py`: 
+```bash
+rasp$ ./lora_util.py
+SX127x LoRa registers:
+ mode               SLEEP
+ freq               434.000000 MHz
+ coding_rate        CR4_5
+ bw                 BW125
+ spreading_factor   128 chips/symb
+ implicit_hdr_mode  OFF
+ and so on ....
+```
+
+
+# Class Reference
+
+The interface to the SX127x LoRa modem is implemented in the class `SX127x.LoRa.LoRa`.
+The most important modem configuration parameters are:
+ 
+| Function         | Description                                 |
+|------------------|---------------------------------------------|
+| set_mode         | Change OpMode, use the constants.MODE class |
+| set_freq         | Set the frequency                           |
+| set_bw           | Set the bandwidth 7.8kHz ... 500kHz         |
+| set_coding_rate  | Set the coding rate 4/5, 4/6, 4/7, 4/8      |
+| | |
+| @todo            |                              |
+
+Most set_* functions have a mirror get_* function, but beware that the getter return types do not necessarily match 
+the setter input types.
+
+### Register naming convention
+The register addresses are defined in class `SX127x.constants.REG` and we use a specific naming convention which 
+is best illustrated by a few examples:
+
+| Register | Modem | Semtech doc.      | pySX127x                   |
+|----------|-------|-------------------| ---------------------------|
+| 0x0E     | LoRa  | RegFifoTxBaseAddr | REG.LORA.FIFO_TX_BASE_ADDR |
+| 0x0E     | FSK   | RegRssiCOnfig     | REG.FSK.RSSI_CONFIG        |
+| 0x1D     | LoRa  | RegModemConfig1   | REG.LORA.MODEM_CONFIG_1    |
+| etc.     |       |                   |                            |
+
+### Hardware
+Hardware related definition and initialisation are located in `SX127x.board_config.BOARD`.
+If you use a SBC other than the Raspberry Pi you'll have to adapt the BOARD class.
+
+
+# Script references
+
+### Continuous receiver `rx_cont.py`
 The SX127x is put in RXCONT mode and continuously waits for transmissions. Upon a successful read the
 payload and the irq flags are printed to screen.
+``` bash
+usage: Continous receiver [-h] [--ocp OCP] [--sf SF] [--freq FREQ] [--bw BW]
+                          [--cr CODING_RATE] [--preamble PREAMBLE]
 
-### `beacon.py`
+optional arguments:
+  -h, --help            show this help message and exit
+  --ocp OCP, -c OCP     Over current protection in mA (45 .. 240 mA)
+  --sf SF, -s SF        Spreading factor (6...12). Default is 7.
+  --freq FREQ, -f FREQ  Frequency
+  --bw BW, -b BW        Bandwidth (one of BW7_8 BW10_4 BW15_6 BW20_8 BW31_25
+                        BW41_7 BW62_5 BW125 BW250 BW500). Default is BW125.
+  --cr CODING_RATE, -r CODING_RATE
+                        Coding rate (one of CR4_5 CR4_6 CR4_7 CR4_8). Default
+                        is CR4_5.
+  --preamble PREAMBLE, -p PREAMBLE
+                        Preamble length. Default is 8.```
+
+### Simple LoRa beacon `tx_beacon.py`
 A small payload is transmitted in regular intervals.
+``` bash
+usage: A simple LoRa beacon [-h] [--ocp OCP] [--sf SF] [--freq FREQ] [--bw BW]
+                            [--cr CODING_RATE] [--preamble PREAMBLE]
+                            [--single] [--wait WAIT]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --ocp OCP, -c OCP     Over current protection in mA (45 .. 240 mA)
+  --sf SF, -s SF        Spreading factor (6...12). Default is 7.
+  --freq FREQ, -f FREQ  Frequency
+  --bw BW, -b BW        Bandwidth (one of BW7_8 BW10_4 BW15_6 BW20_8 BW31_25
+                        BW41_7 BW62_5 BW125 BW250 BW500). Default is BW125.
+  --cr CODING_RATE, -r CODING_RATE
+                        Coding rate (one of CR4_5 CR4_6 CR4_7 CR4_8). Default
+                        is CR4_5.
+  --preamble PREAMBLE, -p PREAMBLE
+                        Preamble length. Default is 8.
+  --single, -S          Single transmission
+  --wait WAIT, -w WAIT  Waiting time between transmissions (default is 0s)
+```
 
 
 # Tests
@@ -130,7 +235,7 @@ Follow me on twitter [@markuscmayer](https://twitter.com/markuscmayer) and
 [@mayeranalytics](https://twitter.com/mayeranalytics).
 
 
-# Version and future plans
+# Roadmap
 
 **pySX127x** is still in the development phase. The current version is 0.1.
 
