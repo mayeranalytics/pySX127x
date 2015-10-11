@@ -97,6 +97,11 @@ class MyLoRa(LoRa):
     # etc.
 ```
 
+In the end the resources should be freed properly
+```python
+BOARD.teardown()
+```
+
 ### More details
 Most functions of `SX127x.Lora` are setter and getter functions. For example, the setter and getter for 
 the coding rate are demonstrated here
@@ -128,7 +133,7 @@ At this point you may want to confirm that the unit tests pass. See the section 
 
 You can now run the scripts. For example dump the registers with `lora_util.py`: 
 ```bash
-rasp$ ./lora_util.py
+rasp$ sudo ./lora_util.py
 SX127x LoRa registers:
  mode               SLEEP
  freq               434.000000 MHz
@@ -136,7 +141,7 @@ SX127x LoRa registers:
  bw                 BW125
  spreading_factor   128 chips/symb
  implicit_hdr_mode  OFF
- and so on ....
+ ... and so on ....
 ```
 
 
@@ -178,9 +183,11 @@ If you use a SBC other than the Raspberry Pi you'll have to adapt the BOARD clas
 ### Continuous receiver `rx_cont.py`
 The SX127x is put in RXCONT mode and continuously waits for transmissions. Upon a successful read the
 payload and the irq flags are printed to screen.
-``` bash
-usage: Continous receiver [-h] [--ocp OCP] [--sf SF] [--freq FREQ] [--bw BW]
-                          [--cr CODING_RATE] [--preamble PREAMBLE]
+```
+usage: rx_cont.py [-h] [--ocp OCP] [--sf SF] [--freq FREQ] [--bw BW]
+                  [--cr CODING_RATE] [--preamble PREAMBLE]
+
+Continous LoRa receiver
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -198,10 +205,12 @@ optional arguments:
 
 ### Simple LoRa beacon `tx_beacon.py`
 A small payload is transmitted in regular intervals.
-``` bash
-usage: A simple LoRa beacon [-h] [--ocp OCP] [--sf SF] [--freq FREQ] [--bw BW]
-                            [--cr CODING_RATE] [--preamble PREAMBLE]
-                            [--single] [--wait WAIT]
+```
+usage: tx_beacon.py [-h] [--ocp OCP] [--sf SF] [--freq FREQ] [--bw BW]
+                    [--cr CODING_RATE] [--preamble PREAMBLE] [--single]
+                    [--wait WAIT]
+
+A simple LoRa beacon
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -262,17 +271,26 @@ The test coverage is rather low but we intend to change that soon.
 (technical paper)
 
 
-# License
+# Copyright and License
 
-**pySX127x** is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+&copy; 2015 Mayer Analytics Ltd., All Rights Reserved.
 
-pySX127x is distributed in the hope that it will be useful,
-but **WITHOUT ANY WARRANTY**; without even the implied warranty of
-**MERCHANTABILITY** or **FITNESS FOR A PARTICULAR PURPOSE**.  See the
-GNU General Public License for more details.
+### Short version
+The license is [GNU AGPL](http://www.gnu.org/licenses/agpl-3.0.en.html).
+
+### Long version
+pySX127x is free software: you can redistribute it and/or modify it under the terms of the 
+GNU Affero General Public License as published by the Free Software Foundation, 
+either version 3 of the License, or (at your option) any later version.
+
+pySX127x is distributed in the hope that it will be useful, 
+but WITHOUT ANY WARRANTY; without even the implied warranty of 
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+See the GNU Affero General Public License for more details.
+
+You can be released from the requirements of the license by obtaining a commercial license. 
+Such a license is mandatory as soon as you develop commercial activities involving 
+pySX127x without disclosing the source code of your own applications, or shipping pySX127x with a closed source product.
 
 You should have received a copy of the GNU General Public License
-along with **pySX127x**.  If not, see <http://www.gnu.org/licenses/>.
+along with pySX127.  If not, see <http://www.gnu.org/licenses/>.
