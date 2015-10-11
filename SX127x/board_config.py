@@ -16,16 +16,24 @@
 # along with pySX127x.  If not, see <http://www.gnu.org/licenses/>.
 
 import RPi.GPIO as GPIO
+import spidev
+
+import time
 
 
 class BOARD:
-    """ All the board pin config is kept here. Note that the BCOM numbering for the GPIOs is used.
+    """ Board initialisation/teardown and pin configuration is kept here.
+        This is the Raspberry Pi board with one LED and a modtronix inAir9B
     """
-    DIO0 = 21   # RaspPi GPIO 21
-    DIO1 = 22   # RaspPi GPIO 22
-    DIO2 = 23   # RaspPi GPIO 23
-    DIO3 = 24   # RaspPi GPIO 24
-    LED  = 25   # RaspPi GPIO 25 connects to the LED on the proto shield
+    # Note that the BCOM numbering for the GPIOs is used.
+    DIO0 = 22   # RaspPi GPIO 21
+    DIO1 = 23   # RaspPi GPIO 22
+    DIO2 = 24   # RaspPi GPIO 23
+    DIO3 = 25   # RaspPi GPIO 24
+    LED  = 18   # RaspPi GPIO 18 connects to the LED on the proto shield
+
+    # The spi object is kept here
+    spi = None
 
     @staticmethod
     def setup():
@@ -39,6 +47,41 @@ class BOARD:
         # DIOx
         for gpio_pin in [BOARD.DIO0, BOARD.DIO1, BOARD.DIO2, BOARD.DIO3]:
             GPIO.setup(gpio_pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+        # blink 2 times to signal the board is set up
+        BOARD.blink(.1,2)
+
+    @staticmethod
+    def teardown():
+        """ Cleanup GPIO and SpiDev """
+        GPIO.cleanup()
+        BOARD.spi.close()
+
+    @staticmethod
+    def SpiDev():
+        """ Init and return the SpiDev object
+        :return: SpiDev object
+        :rtype: SpiDev
+        """
+        BOARD.spi = spidev.SpiDev()
+        BOARD.spi.open(0, 0)
+        return BOARD.spi
+
+    @staticmethod
+    def add_event_detect(dio_number, callback):
+        """ Wraps around the GPIO.add_event_detect function
+        :param dio_number: DIO pin 0...5
+        :param callback: The function to call when the DIO triggers an IRQ.
+        :return: None
+        """
+        GPIO.add_event_detect(dio_number, GPIO.RISING, callback=callback)
+
+    @staticmethod
+    def add_events(cb_dio0, cb_dio1, cb_dio2, cb_dio3, cb_dio4, cb_dio5):
+        BOARD.add_event_detect(BOARD.DIO0, callback=cb_dio0)
+        BOARD.add_event_detect(BOARD.DIO1, callback=cb_dio1)
+        BOARD.add_event_detect(BOARD.DIO2, callback=cb_dio2)
+        BOARD.add_event_detect(BOARD.DIO3, callback=cb_dio3)
+        # the modtronix inAir9B does not expose DIO4 and DIO5
 
     @staticmethod
     def led_on(value=1):
@@ -57,3 +100,15 @@ class BOARD:
         """
         GPIO.output(BOARD.LED, 0)
         return 0
+
+    @staticmethod
+    def blink(time_sec, n_blink):
+        if n_blink == 0L:
+            return
+        BOARD.led_on()
+        for i in range(n_blink):
+            time.sleep(time_sec)
+            BOARD.led_off()
+            time.sleep(time_sec)
+            BOARD.led_on()
+        BOARD.led_off()
