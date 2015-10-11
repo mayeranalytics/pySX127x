@@ -41,3 +41,5 @@ if args.dump:
 
 else:
     print(lora)
+
+BOARD.teardown()
