@@ -552,7 +552,22 @@ class LoRa(object):
         loc = {s: current[s] if loc[s] is None else loc[s] for s in loc}
         val = (loc['low_data_rate_optim'] << 3) | (loc['agc_auto_on'] << 2)
         return self.spi.xfer([REG.LORA.MODEM_CONFIG_3 | 0x80, val])[1]
+
+    @setter(REG.LORA.INVERT_IQ)
+    def set_invert_iq(self, invert):
+        """ Invert the LoRa I and Q signals
+        :param invert: 0: normal mode, 1: I and Q inverted
+        :return: New value of register
+        """
+        return 0x27 | (invert & 0x01) << 6
         
+    @getter(REG.LORA.INVERT_IQ)
+    def get_invert_iq(self, val):
+        """ Get the invert the I and Q setting
+        :return: 0: normal mode, 1: I and Q inverted
+        """
+        return (val >> 6) & 0x01
+
     def get_agc_auto_on(self):
         return self.get_modem_config_3()['agc_auto_on']
 
@@ -576,8 +591,8 @@ class LoRa(object):
         msb = timeout >> 8 & 0b11    # bits 8-9
         lsb = timeout - 256 * msb    # bits 0-7
         reg_modem_config_2 = bkup_reg_modem_config_2 & 0xFC | msb    # bits 2-7 of bkup_reg_modem_config_2 ORed with the two msb bits
-        old_msb = self.spi.xfer([REG.LORA.MODEM_CONFIG_2, reg_modem_config_2])[1] & 0x03
-        old_lsb = self.spi.xfer([REG.LORA.SYMB_TIMEOUT_LSB, lsb])[1]
+        old_msb = self.spi.xfer([REG.LORA.MODEM_CONFIG_2  | 0x80, reg_modem_config_2])[1] & 0x03
+        old_lsb = self.spi.xfer([REG.LORA.SYMB_TIMEOUT_LSB | 0x80, lsb])[1]
         return old_lsb + 256 * old_msb
 
     def get_preamble(self):
@@ -622,19 +637,37 @@ class LoRa(object):
 
     @getter(REG.LORA.DETECT_OPTIMIZE)
     def get_detect_optimize(self, val):
+        """ Get LoRa detection optimize setting
+        :return: detection optimize setting 0x03: SF7-12, 0x05: SF6
+
+        """
         return val & 0b111
 
     @setter(REG.LORA.DETECT_OPTIMIZE)
-    def set_detect_optimize(self, val):
-        return val & 0b111
+    def set_detect_optimize(self, detect_optimize):
+        """ Set LoRa detection optimize
+        :param detect_optimize 0x03: SF7-12, 0x05: SF6
+        :return: New register value
+        """
+        assert detect_optimize == 0x03 or detect_optimize == 0x05
+        return detect_optimize & 0b111
 
     @getter(REG.LORA.DETECTION_THRESH)
     def get_detection_threshold(self, val):
+        """ Get LoRa detection threshold setting
+        :return: detection threshold 0x0A: SF7-12, 0x0C: SF6
+
+        """
         return val
 
     @setter(REG.LORA.DETECTION_THRESH)
-    def set_detection_threshold(self, val):
-        return val
+    def set_detection_threshold(self, detect_threshold):
+        """ Set LoRa detection optimize
+        :param detect_threshold 0x0A: SF7-12, 0x0C: SF6
+        :return: New register value
+        """
+        assert detect_threshold == 0x0A or detect_threshold == 0x0C
+        return detect_threshold
 
     @getter(REG.LORA.SYNC_WORD)
     def get_sync_word(self, sync_word):
