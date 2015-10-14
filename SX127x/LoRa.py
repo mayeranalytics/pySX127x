@@ -92,20 +92,20 @@ class LoRa(object):
         self.rx_chain_calibration(968.)
         # the FSK registers are set up exactly as modtronix do it:
         lookup_fsk = [
-            [REG.FSK.LNA            , 0x23],
-            [REG.FSK.RX_CONFIG      , 0x1E],
-            [REG.FSK.RSSI_CONFIG    , 0xD2],
-            [REG.FSK.PREAMBLE_DETECT, 0xAA],
-            [REG.FSK.OSC            , 0x07],
-            [REG.FSK.SYNC_CONFIG    , 0x12],
-            [REG.FSK.SYNC_VALUE_1   , 0xC1],
-            [REG.FSK.SYNC_VALUE_2   , 0x94],
-            [REG.FSK.SYNC_VALUE_3   , 0xC1],
-            [REG.FSK.PACKET_CONFIG_1, 0xD8],
-            [REG.FSK.FIFO_THRESH    , 0x8F],
-            [REG.FSK.IMAGE_CAL      , 0x02],
-            [REG.FSK.DIO_MAPPING_1  , 0x00],
-            [REG.FSK.DIO_MAPPING_2  , 0x30]
+            #[REG.FSK.LNA            , 0x23],
+            #[REG.FSK.RX_CONFIG      , 0x1E],
+            #[REG.FSK.RSSI_CONFIG    , 0xD2],
+            #[REG.FSK.PREAMBLE_DETECT, 0xAA],
+            #[REG.FSK.OSC            , 0x07],
+            #[REG.FSK.SYNC_CONFIG    , 0x12],
+            #[REG.FSK.SYNC_VALUE_1   , 0xC1],
+            #[REG.FSK.SYNC_VALUE_2   , 0x94],
+            #[REG.FSK.SYNC_VALUE_3   , 0xC1],
+            #[REG.FSK.PACKET_CONFIG_1, 0xD8],
+            #[REG.FSK.FIFO_THRESH    , 0x8F],
+            #[REG.FSK.IMAGE_CAL      , 0x02],
+            #[REG.FSK.DIO_MAPPING_1  , 0x00],
+            #[REG.FSK.DIO_MAPPING_2  , 0x30]
         ]
         self.set_mode(MODE.FSK_STDBY)
         for register_address, value in lookup_fsk:
@@ -294,8 +294,13 @@ class LoRa(object):
             )
 
     def set_pa_config(self, pa_select=None, max_power=None, output_power=None):
-        # the inAir9 uses the RFO pin, so I don't allow to switch to PA_BOOST
-        assert pa_select is None or pa_select == 0
+        """ Configure the PA
+        :param pa_select: Selects PA output pin, 0->RFO, 1->PA_BOOST
+        :param max_power: Select max output power Pmax=10.8+0.6*MaxPower
+        :param output_power: Output power Pout=Pmax-(15-OutputPower) if PaSelect = 0,
+                Pout=17-(15-OutputPower) if PaSelect = 1 (PA_BOOST pin)
+        :return: new register value
+        """
         loc = locals()
         current = self.get_pa_config()
         loc = {s: current[s] if loc[s] is None else loc[s] for s in loc}
