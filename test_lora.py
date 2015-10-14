@@ -118,7 +118,7 @@ class TestSX127x(unittest.TestCase):
 #    def test_set_lna_gain(self):
 #        bkup_lna_gain = lora.get_lna()['lna_gain']
 #        for target_gain in [GAIN.NOT_USED, GAIN.G1, GAIN.G2, GAIN.G6, GAIN.NOT_USED, bkup_lna_gain]:
-#            print target_gain
+#            print(target_gain)
 #            lora.set_lna_gain(target_gain)
 #            actual_gain = lora.get_lna()['lna_gain']
 #            self.assertEqual(GAIN.lookup[actual_gain], GAIN.lookup[target_gain])

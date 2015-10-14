@@ -91,7 +91,7 @@ class BOARD:
         BOARD.add_event_detect(BOARD.DIO3, callback=cb_dio3)
         # the modtronix inAir9B does not expose DIO4 and DIO5
         if switch_cb is not None:
-	    GPIO.add_event_detect(BOARD.SWITCH, GPIO.RISING, callback=switch_cb, bouncetime=300)
+            GPIO.add_event_detect(BOARD.SWITCH, GPIO.RISING, callback=switch_cb, bouncetime=300)
 
     @staticmethod
     def led_on(value=1):
@@ -113,7 +113,7 @@ class BOARD:
 
     @staticmethod
     def blink(time_sec, n_blink):
-        if n_blink == 0L:
+        if n_blink == 0:
             return
         BOARD.led_on()
         for i in range(n_blink):

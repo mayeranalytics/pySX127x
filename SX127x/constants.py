@@ -26,7 +26,7 @@ def add_lookup(cls):
         The lookup dictionary maps the codes back to the names. This is used for pretty-printing. """
     varnames = filter(str.isupper, cls.__dict__.keys())
     lookup = dict(map(lambda varname: (cls.__dict__.get(varname, None), varname), varnames))
-    cls.__dict__['lookup'] = lookup
+    setattr(cls, 'lookup', lookup)
     return cls
 
 
@@ -153,6 +153,7 @@ class REG:
         PPM_CORRECTION     = 0x27
         FEI_MSB            = 0x28
         DETECT_OPTIMIZE    = 0X31
+        INVERT_IQ          = 0x33
         DETECTION_THRESH   = 0X37
         SYNC_WORD          = 0X39
         DIO_MAPPING_1      = 0x40
