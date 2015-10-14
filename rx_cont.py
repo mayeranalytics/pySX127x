@@ -87,6 +87,7 @@ lora = LoRaRcvCont(verbose=False)
 args = parser.parse_args(lora)
 
 lora.set_mode(MODE.STDBY)
+lora.set_pa_config(pa_select=1)
 #lora.set_rx_crc(True)
 #lora.set_coding_rate(CODING_RATE.CR4_6)
 #lora.set_pa_config(max_power=0, output_power=0)

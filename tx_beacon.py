@@ -101,6 +101,7 @@ class LoRaBeacon(LoRa):
 lora = LoRaBeacon(verbose=False)
 args = parser.parse_args(lora)
 
+lora.set_pa_config(pa_select=1)
 #lora.set_rx_crc(True)
 #lora.set_agc_auto_on(True)
 #lora.set_lna_gain(GAIN.NOT_USED)
