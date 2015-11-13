@@ -252,11 +252,11 @@ Follow me on twitter [@markuscmayer](https://twitter.com/markuscmayer) and
 95% of functions for the Sx127x LoRa capabilities are implemented. Functions will be added when necessary.
 The test coverage is rather low but we intend to change that soon.
 
-# HopeRF chips
+### HopeRF chips
 It turns out the HopeRF has a family of LoRa capable transceiver chips [RFM92/95/96/98](http://www.hoperf.com/rf/lora/)
 that have identical or almost identical SPI interface as the Semtech [SX127x family](http://www.hoperf.com/rf/lora/).
 
-The pySX127x project will therefore be renamed to [pyLoRa]](https://github.com/mayeranalytics/pyLoRa) at some point.
+The [pySX127x](https://github.com/mayeranalytics/pySX127x) project will therefore be renamed to pyLoRa at some point.
 
 
 # References

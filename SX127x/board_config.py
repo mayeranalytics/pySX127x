@@ -31,10 +31,10 @@ class BOARD:
         This is the Raspberry Pi board with one LED and a modtronix inAir9B
     """
     # Note that the BCOM numbering for the GPIOs is used.
-    DIO0 = 22   # RaspPi GPIO 21
-    DIO1 = 23   # RaspPi GPIO 22
-    DIO2 = 24   # RaspPi GPIO 23
-    DIO3 = 25   # RaspPi GPIO 24
+    DIO0 = 22   # RaspPi GPIO 22
+    DIO1 = 23   # RaspPi GPIO 23
+    DIO2 = 24   # RaspPi GPIO 24
+    DIO3 = 25   # RaspPi GPIO 25
     LED  = 18   # RaspPi GPIO 18 connects to the LED on the proto shield
     SWITCH = 4  # RaspPi GPIO 4 connects to a switch
 
@@ -91,7 +91,7 @@ class BOARD:
         BOARD.add_event_detect(BOARD.DIO3, callback=cb_dio3)
         # the modtronix inAir9B does not expose DIO4 and DIO5
         if switch_cb is not None:
-	    GPIO.add_event_detect(BOARD.SWITCH, GPIO.RISING, callback=switch_cb, bouncetime=300)
+            GPIO.add_event_detect(BOARD.SWITCH, GPIO.RISING, callback=switch_cb, bouncetime=300)
 
     @staticmethod
     def led_on(value=1):
@@ -113,7 +113,7 @@ class BOARD:
 
     @staticmethod
     def blink(time_sec, n_blink):
-        if n_blink == 0L:
+        if n_blink == 0:
             return
         BOARD.led_on()
         for i in range(n_blink):

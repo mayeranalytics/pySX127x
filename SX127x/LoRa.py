@@ -21,8 +21,8 @@
 
 
 import sys
-from constants import *
-from board_config import BOARD
+from .constants import *
+from .board_config import BOARD
 
 
 ################################################## Some utility functions ##############################################
@@ -158,7 +158,6 @@ class LoRa(object):
         # DIO1 00: RxTimeout
         # DIO1 01: FhssChangeChannel
         # DIO1 10: CadDetected
-        print "dio1"
         if self.dio_mapping[1] == 0:
             self.on_rx_timeout()
         elif self.dio_mapping[1] == 1:
@@ -178,7 +177,6 @@ class LoRa(object):
         # DIO3 00: CadDone
         # DIO3 01: ValidHeader
         # DIO3 10: PayloadCrcError
-        print "dio3"
         if self.dio_mapping[3] == 0:
             self.on_cad_done()
         elif self.dio_mapping[3] == 1:

@@ -40,37 +40,37 @@ class LoRaRcvCont(LoRa):
 
     def on_rx_done(self):
         BOARD.led_on()
-        print "\nRxDone"
-        print self.get_irq_flags()
-        print map(hex, self.read_payload(nocheck=True))
+        print("\nRxDone")
+        print(self.get_irq_flags())
+        print(map(hex, self.read_payload(nocheck=True)))
         self.set_mode(MODE.SLEEP)
         self.reset_ptr_rx()
         BOARD.led_off()
         self.set_mode(MODE.RXCONT)
 
     def on_tx_done(self):
-        print "\nTxDone"
-        print self.get_irq_flags()
+        print("\nTxDone")
+        print(self.get_irq_flags())
 
     def on_cad_done(self):
-        print "\non_CadDone";
-        print self.get_irq_flags()
+        print("\non_CadDone")
+        print(self.get_irq_flags())
 
     def on_rx_timeout(self):
-        print "\non_RxTimeout"
-        print self.get_irq_flags()
+        print("\non_RxTimeout")
+        print(self.get_irq_flags())
 
     def on_valid_header(self):
-        print "\non_ValidHeader"
-        print self.get_irq_flags()
+        print("\non_ValidHeader")
+        print(self.get_irq_flags())
 
     def on_payload_crc_error(self):
-        print "\non_PayloadCrcError"
-        print self.get_irq_flags()
+        print("\non_PayloadCrcError")
+        print(self.get_irq_flags())
 
     def on_fhss_change_channel(self):
-        print "\non_FhssChangeChannel"
-        print self.get_irq_flags()
+        print("\non_FhssChangeChannel")
+        print(self.get_irq_flags())
 
     def start(self):
         self.reset_ptr_rx()
@@ -97,21 +97,22 @@ lora.set_pa_config(pa_select=1)
 #lora.set_pa_ramp(PA_RAMP.RAMP_50_us)
 #lora.set_agc_auto_on(True)
 
-print lora
+print(lora)
 assert(lora.get_agc_auto_on() == 1)
 
-raw_input("Press enter to start...")
+try: input("Press enter to start...")
+except: pass
 
 try:
     lora.start()
 except KeyboardInterrupt:
     sys.stdout.flush()
-    print
+    print("")
     sys.stderr.write("KeyboardInterrupt\n")
 finally:
     sys.stdout.flush()
-    print
+    print("")
     lora.set_mode(MODE.SLEEP)
-    print lora
+    print(lora)
     BOARD.teardown()
 
