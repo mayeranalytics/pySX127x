@@ -1,9 +1,9 @@
 # Overview
 
-This is a python interface to the [Semtech SX127x](http://www.semtech.com/wireless-rf/rf-transceivers/) 
+This is a python interface to the [Semtech SX1276/7/8/9](http://www.semtech.com/wireless-rf/rf-transceivers/) 
 long range, low power transceiver family.
 
-The SX127x has both LoRa and FSK capabilities. Here the focus lies on the
+The SX127x have both LoRa and FSK capabilities. Here the focus lies on the
 LoRa spread spectrum modulation hence only the LoRa modem interface is implemented so far 
 (but see the [roadmap](#roadmap) below for future plans).
 
