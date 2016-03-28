@@ -81,7 +81,7 @@ class LoRa(object):
     verbose = True
     dio_mapping = [None] * 6          # store the dio mapping here
 
-    def __init__(self, verbose=True):
+    def __init__(self, verbose=True, calibration_freq=868):
         self.verbose = verbose
         # set the callbacks for DIO0..5 IRQs.
         BOARD.add_events(self._dio0, self._dio1, self._dio2, self._dio3, self._dio4, self._dio5)
@@ -89,7 +89,7 @@ class LoRa(object):
         self.set_mode(MODE.SLEEP)
         self.backup_registers = self.get_all_registers()
         # more setup work:
-        self.rx_chain_calibration(968.)
+        self.rx_chain_calibration(calibration_freq)
         # the FSK registers are set up exactly as modtronix do it:
         lookup_fsk = [
             #[REG.FSK.LNA            , 0x23],
