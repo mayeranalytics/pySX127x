@@ -447,9 +447,19 @@ class LoRa(object):
                 v = set_bit(v, i, this_bit)
         return self.spi.xfer([REG.LORA.IRQ_FLAGS | 0x80, v])[1]
 
-    def clear_irq_flags(self):
-        v = self.spi.xfer([REG.LORA.IRQ_FLAGS | 0x80, 0])[1]
-        return v
+    def clear_irq_flags(self,
+                        RxTimeout=None, RxDone=None, PayloadCrcError=None, 
+                        ValidHeader=None, TxDone=None, CadDone=None, 
+                        FhssChangeChannel=None, CadDetected=None):
+        v = 0
+        for i, s in enumerate(['CadDetected', 'FhssChangeChannel', 'CadDone', 
+                                'TxDone', 'ValidHeader', 'PayloadCrcError', 
+                                'RxDone', 'RxTimeout']):
+            this_bit = locals()[s]
+            if this_bit is not None:
+                v = set_bit(v, eval('MASK.IRQ_FLAGS.' + s), this_bit)
+        return self.spi.xfer([REG.LORA.IRQ_FLAGS | 0x80, v])[1]
+
 
     def get_rx_nb_bytes(self):
         return self.spi.xfer([REG.LORA.RX_NB_BYTES, 0])[1]
