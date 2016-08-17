@@ -227,6 +227,9 @@ class LoRa(object):
         :param payload: Payload to write (list)
         :return:    Written payload
         """
+        payload_size = len(payload)
+        self.set_payload_length(payload_size)
+        
         self.set_mode(MODE.STDBY)
         base_addr = self.get_fifo_tx_base_addr()
         self.set_fifo_addr_ptr(base_addr)

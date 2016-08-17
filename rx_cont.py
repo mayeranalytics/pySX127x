@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3
 
 """ A simple continuous receiver class. """
 
@@ -41,8 +41,9 @@ class LoRaRcvCont(LoRa):
     def on_rx_done(self):
         BOARD.led_on()
         print("\nRxDone")
-        print(self.get_irq_flags())
-        print(map(hex, self.read_payload(nocheck=True)))
+        self.clear_irq_flags(RxDone=1)
+        payload = self.read_payload(nocheck=True)
+        print(bytes(payload).decode())
         self.set_mode(MODE.SLEEP)
         self.reset_ptr_rx()
         BOARD.led_off()
@@ -115,4 +116,3 @@ finally:
     lora.set_mode(MODE.SLEEP)
     print(lora)
     BOARD.teardown()
-
