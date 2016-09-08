@@ -26,6 +26,7 @@
 
 
 import sys, asyncore
+from time import time
 from SX127x.LoRa import *
 from SX127x.board_config import BOARD
 
@@ -76,15 +77,22 @@ class LoRaSocket(LoRa):
         self.set_mode(MODE.SLEEP)
         self.set_pa_config(pa_select=1)
         self.set_max_payload_length(128) # set max payload to max fifo buffer length
+        self.payload = []
         self.set_dio_mapping([0] * 6) #initialise DIO0 for rxdone  
         
     # when LoRa receives data send to socket conn
     def on_rx_done(self):        
-        payload = self.read_payload(nocheck=True) #get payload from lora fifo
-        print('Recv:' + str(bytes(payload)))
+        payload = self.read_payload(nocheck=True)
         
-        server.conn.databuffer = bytes(payload) #send to socket conn
-        
+        if len(payload) == 127:
+            self.payload[len(self.payload):] = payload
+        else:
+            self.payload[len(self.payload):] = payload
+            print('Recv:' + str(bytes(self.payload)))
+
+            server.conn.databuffer = bytes(self.payload) #send to socket conn
+            self.payload = []
+
         self.clear_irq_flags(RxDone=1) # clear rxdone IRQ flag
         self.reset_ptr_rx()
         self.set_mode(MODE.RXCONT)
