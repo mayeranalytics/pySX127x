@@ -86,12 +86,18 @@ class BOARD:
         GPIO.add_event_detect(dio_number, GPIO.RISING, callback=callback)
 
     @staticmethod
-    def add_events(cb_dio0, cb_dio1, cb_dio2, cb_dio3, cb_dio4, cb_dio5, switch_cb=None):
+    def add_events(cb_dio0, cb_dio1, cb_dio2, cb_dio3=None, cb_dio4=None, cb_dio5=None, switch_cb=None):
         BOARD.add_event_detect(BOARD.DIO0, callback=cb_dio0)
         BOARD.add_event_detect(BOARD.DIO1, callback=cb_dio1)
         BOARD.add_event_detect(BOARD.DIO2, callback=cb_dio2)
-        BOARD.add_event_detect(BOARD.DIO3, callback=cb_dio3)
+        # the NiceRF LoRa1276 does not expose DIO3
+        if cb_dio3 is not None:
+            BOARD.add_event_detect(BOARD.DIO3, callback=cb_dio3)
         # the modtronix inAir9B does not expose DIO4 and DIO5
+        if cb_dio4 is not None:
+            BOARD.add_event_detect(BOARD.DIO4, callback=cb_dio4)
+        if cb_dio5 is not None:
+            BOARD.add_event_detect(BOARD.DIO5, callback=cb_dio5)
         if switch_cb is not None:
             GPIO.add_event_detect(BOARD.SWITCH, GPIO.RISING, callback=switch_cb, bouncetime=300)
 
