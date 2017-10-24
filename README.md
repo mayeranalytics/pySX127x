@@ -285,6 +285,7 @@ LoRaWAN is a LPWAN (low power WAN) and, and  **pySX127x** has almost no relation
 ### LoRa performance tests
 * [Extreme Range Links: LoRa 868 / 900MHz SX1272 LoRa module for Arduino, Raspberry Pi and Intel Galileo](https://www.cooking-hacks.com/documentation/tutorials/extreme-range-lora-sx1272-module-shield-arduino-raspberry-pi-intel-galileo/)
 * [UK LoRa versus FSK - 40km LoS (Line of Sight) test!](http://www.instructables.com/id/Introducing-LoRa-/step17/Other-region-tests/)
+* [Andreas Spiess LoRaWAN World Record Attempt](https://www.youtube.com/watch?v=adhWIo-7gr4)
 
 ### Spread spectrum modulation theory
 * [An Introduction to Spread Spectrum Techniques](http://www.ausairpower.net/OSR-0597.html)
