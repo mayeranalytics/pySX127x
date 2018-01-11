@@ -1,5 +1,3 @@
-Note: The pySX127x project will soon be renamed to pyLoRa. See [Roadmap](#roadmap) for more.
-
 # Overview
 
 This is a python interface to the [Semtech SX1276/7/8/9](http://www.semtech.com/wireless-rf/rf-transceivers/) 
@@ -249,8 +247,6 @@ Follow me on twitter [@markuscmayer](https://twitter.com/markuscmayer) and
 
 # Roadmap
 
-**pySX127x** is still in the development phase. The current version is 0.1.
-
 95% of functions for the Sx127x LoRa capabilities are implemented. Functions will be added when necessary.
 The test coverage is rather low but we intend to change that soon.
 
@@ -262,8 +258,8 @@ But the pySX127x library should get you pretty far if you use it with care. Here
 * [Semtech SX1272/73 - 860 MHz to 1020 MHz Low Power Long Range Transceiver](http://www.semtech.com/images/datasheet/sx1272.pdf)
 
 ### HopeRF transceiver ICs ###
-HopeRF has a family of LoRa capable transceiver chips [RFM92/95/96/98](http://www.hoperf.com/rf/lora/)
-that have identical or almost identical SPI interface as the Semtech [SX1276/7/8/9 family](http://www.hoperf.com/rf/lora/).
+HopeRF has a family of LoRa capable transceiver chips [RFM92/95/96/98](http://www.hoperf.com/)
+that have identical or almost identical SPI interface as the Semtech SX1276/7/8/9 family.
 
 ### Microchip transceiver IC ###
 Likewise Microchip has the chip [RN2483](http://ww1.microchip.com/downloads/en/DeviceDoc/50002346A.pdf)
