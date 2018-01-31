@@ -74,6 +74,7 @@ class BOARD:
         """
         BOARD.spi = spidev.SpiDev()
         BOARD.spi.open(spi_bus, spi_cs)
+        BOARD.spi.max_speed_hz = 5000000    # SX127x can go up to 10MHz, pick half that to be safe
         return BOARD.spi
 
     @staticmethod
