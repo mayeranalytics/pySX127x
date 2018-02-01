@@ -1,4 +1,4 @@
-""" Defines the BOARD class that contains the board pin mappings. """
+""" Defines the BOARD class that contains the board pin mappings and RF module HF/LF info. """
 
 # Copyright 2015 Mayer Analytics Ltd.
 #
