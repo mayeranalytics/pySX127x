@@ -1,7 +1,7 @@
 """ Defines constants (modes, bandwidths, registers, etc.) needed by SX127x. """
+# -*- coding: utf-8 -*-
 
-
-# Copyright 2015 Mayer Analytics Ltd.
+# Copyright 2015-2018 Mayer Analytics Ltd.
 #
 # This file is part of pySX127x.
 #

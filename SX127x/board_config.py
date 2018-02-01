@@ -1,6 +1,7 @@
 """ Defines the BOARD class that contains the board pin mappings and RF module HF/LF info. """
+# -*- coding: utf-8 -*-
 
-# Copyright 2015 Mayer Analytics Ltd.
+# Copyright 2015-2018 Mayer Analytics Ltd.
 #
 # This file is part of pySX127x.
 #

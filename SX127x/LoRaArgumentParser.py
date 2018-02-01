@@ -1,6 +1,7 @@
 """ Defines LoRaArgumentParser which extends argparse.ArgumentParser with standard config parameters for the SX127x. """
+# -*- coding: utf-8 -*-
 
-# Copyright 2015 Mayer Analytics Ltd.
+# Copyright 2018 Mayer Analytics Ltd.
 #
 # This file is part of pySX127x.
 #
