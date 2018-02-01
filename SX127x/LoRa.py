@@ -492,11 +492,11 @@ class LoRa(object):
 
     def get_pkt_rssi_value(self):
         v = self.spi.xfer([REG.LORA.PKT_RSSI_VALUE, 0])[1]
-        return v - 157
+        return v - (164 if BOARD.low_band else 157)     # See datasheet §5.5.5. p. 87
 
     def get_rssi_value(self):
         v = self.spi.xfer([REG.LORA.RSSI_VALUE, 0])[1]
-        return v - 157
+        return v - (164 if BOARD.low_band else 157)     # See datasheet §5.5.5. p. 87
 
     def get_hop_channel(self):
         v = self.spi.xfer([REG.LORA.HOP_CHANNEL, 0])[1]
