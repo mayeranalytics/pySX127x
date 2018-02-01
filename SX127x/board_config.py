@@ -28,7 +28,8 @@ import time
 
 class BOARD:
     """ Board initialisation/teardown and pin configuration is kept here.
-        This is the Raspberry Pi board with one LED and a modtronix inAir9B
+        Also, information about the RF module is kept here.
+        This is the Raspberry Pi board with one LED and a modtronix inAir9B.
     """
     # Note that the BCOM numbering for the GPIOs is used.
     DIO0 = 22   # RaspPi GPIO 22
@@ -40,6 +41,11 @@ class BOARD:
 
     # The spi object is kept here
     spi = None
+    
+    # tell pySX127x here whether the attached RF module uses low-band (RF*_LF pins) or high-band (RF*_HF pins).
+    # low band (called band 1&2) are 137-175 and 410-525
+    # high band (called band 3) is 862-1020
+    low_band = True
 
     @staticmethod
     def setup():
