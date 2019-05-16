@@ -269,7 +269,7 @@ The [pySX127x](https://github.com/mayeranalytics/pySX127x) project will therefor
 # LoRaWAN
 LoRaWAN is a LPWAN (low power WAN) and, and  **pySX127x** has almost no relationship with LoRaWAN. Here we only deal with the interface into the chip(s) that enable the physical layer of LoRaWAN networks. If you need a LoRaWAN implementation have a look at [Jeroennijhof](https://github.com/jeroennijhof)s [LoRaWAN](https://github.com/jeroennijhof/LoRaWAN) which is based on pySX127x.
 
-By the way, LoRaWAN is what you need when you want to talk to the [TheThingsNetwork](https://www.thethingsnetwork.org/), a "global open LoRaWAN network.
+By the way, LoRaWAN is what you need when you want to talk to the [TheThingsNetwork](https://www.thethingsnetwork.org/), a "global open LoRaWAN network". The site has a lot of information and links to products and projects.
 
 
 # References
