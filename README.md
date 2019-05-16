@@ -26,7 +26,7 @@ Although C/C++ is the de facto standard for development on microcontrollers, [py
 running on a Raspberry Pi (NanoPi, BananaPi, UDOO Neo, BeagleBoard, etc. etc.) is becoming a viable alternative for rapid prototyping.
 
 High level programming languages like python require a full-blown OS such as Linux. (There are some exceptions like
-[PyMite](https://wiki.python.org/moin/PyMite) and most notably [MicroPython](https://micropython.org).)
+[PyMite](https://wiki.python.org/moin/PyMite), [CircuitPython](https://www.adafruit.com/circuitpython) and most notably [MicroPython](https://micropython.org).)
 But using hardware capable of running Linux contradicts, to some extent, the low power specification of the SX127x family.
 Therefore it is clear that this approach aims mostly at prototyping and technology testing.
 
