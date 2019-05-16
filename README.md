@@ -23,7 +23,7 @@ Arduino and there are already many fine C/C++ libraries for the SX127x family av
 [github](https://github.com/search?q=sx127x) and [mbed.org](https://developer.mbed.org/search/?q=sx127x).
 
 Although C/C++ is the de facto standard for development on microcontrollers, [python](https://www.python.org)
-running on a Raspberry Pi is becoming a viable alternative for rapid prototyping.
+running on a Raspberry Pi (NanoPi, BananaPi, UDOO Neo, BeagleBoard, etc. etc.) is becoming a viable alternative for rapid prototyping.
 
 High level programming languages like python require a full-blown OS such as Linux. (There are some exceptions like
 [PyMite](https://wiki.python.org/moin/PyMite) and most notably [MicroPython](https://micropython.org).)
