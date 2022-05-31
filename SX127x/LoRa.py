@@ -296,7 +296,10 @@ class LoRa(object):
         output_power = v & 0b1111
         if convert_dBm:
             max_power = max_power * .6 + 10.8
-            output_power = max_power - (15 - output_power)
+            if pa_select==0:
+                output_power = max_power - (15 - output_power)
+            else:
+                output_power = 17 - (15 - output_power)
         return dict(
                 pa_select    = pa_select,
                 max_power    = max_power,
