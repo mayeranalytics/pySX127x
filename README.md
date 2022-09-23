@@ -254,8 +254,8 @@ The test coverage is rather low but we intend to change that soon.
 **pySX127x** is not entirely compatible with the 1272.
 The 1276 and 1272 chips are different and the interfaces not 100% identical. For example registers 0x26/27. 
 But the pySX127x library should get you pretty far if you use it with care. Here are the two datasheets:
-* [Semtech - SX1276/77/78/79 - 137 MHz to 1020 MHz Low Power Long Range Transceiver](http://www.semtech.com/images/datasheet/sx1276_77_78_79.pdf)
-* [Semtech SX1272/73 - 860 MHz to 1020 MHz Low Power Long Range Transceiver](http://www.semtech.com/images/datasheet/sx1272.pdf)
+* [Semtech - SX1276/77/78/79 - 137 MHz to 1020 MHz Low Power Long Range Transceiver](https://semtech.my.salesforce.com/sfc/p/E0000000JelG/a/2R0000001Rbr/6EfVZUorrpoKFfvaF_Fkpgp5kzjiNyiAbqcpqh9qSjE)
+* [Semtech SX1272/73 - 860 MHz to 1020 MHz Low Power Long Range Transceiver](https://semtech.my.salesforce.com/sfc/p/E0000000JelG/a/440000001NCE/v_VBhk1IolDgxwwnOpcS_vTFxPfSEPQbuneK3mWsXlU)
 
 ### HopeRF transceiver ICs ###
 HopeRF has a family of LoRa capable transceiver chips [RFM92/95/96/98](http://www.hoperf.com/)
