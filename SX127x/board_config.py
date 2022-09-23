@@ -1,7 +1,7 @@
 """ Defines the BOARD class that contains the board pin mappings and RF module HF/LF info. """
 # -*- coding: utf-8 -*-
 
-# Copyright 2015-2018 Mayer Analytics Ltd.
+# Copyright 2015-2022 Mayer Analytics Ltd.
 #
 # This file is part of pySX127x.
 #
@@ -38,7 +38,7 @@ class BOARD:
     DIO2 = 24   # RaspPi GPIO 24
     DIO3 = 25   # RaspPi GPIO 25
     LED  = 18   # RaspPi GPIO 18 connects to the LED on the proto shield
-    SWITCH = 4  # RaspPi GPIO 4 connects to a switch
+    SWITCH = 4  # RaspPi GPIO 4 connects to a switch connected to the board which was used to trigger TXs
 
     # The spi object is kept here
     spi = None
