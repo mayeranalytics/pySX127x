@@ -39,7 +39,7 @@ Prototyping on a full-blown OS using high level programming languages has severa
 
 # Hardware
 
-The transceiver module is a SX1276 based Modtronix [inAir9B](http://modtronix.com/inair9.html). 
+The transceiver module is a SX1276 based Modtronix [inAir9B](https://web.archive.org/web/20200926024317/https://modtronix.com/inair9.html). 
 It is mounted on a prototyping board to a Raspberry Pi rev 2 model B.
 
 | Proto board pin | RaspPi GPIO | Direction |
