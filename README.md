@@ -76,8 +76,8 @@ lora.set_mode(MODE.STDBY)
 ```
 Registers are queried like so:
 ```python
-print lora.version()        # this prints the sx127x chip version
-print lora.get_freq()       # this prints the frequency setting 
+print(lora.version())        # this prints the sx127x chip version
+print(lora.get_freq())       # this prints the frequency setting 
 ```
 and setting registers is easy, too
 ```python
@@ -106,7 +106,7 @@ BOARD.teardown()
 Most functions of `SX127x.Lora` are setter and getter functions. For example, the setter and getter for 
 the coding rate are demonstrated here
 ```python 
-print lora.get_coding_rate()                # print the current coding rate
+print(lora.get_coding_rate())                # print the current coding rate
 lora.set_coding_rate(CODING_RATE.CR4_6)     # set it to CR4_6
 ```
 
