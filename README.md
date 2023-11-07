@@ -64,6 +64,7 @@ First import the modules
 ```python
 from SX127x.LoRa import *
 from SX127x.board_config import BOARD
+from SX127x.constants import *
 ```
 then set up the board GPIOs
 ```python
@@ -76,7 +77,7 @@ lora.set_mode(MODE.STDBY)
 ```
 Registers are queried like so:
 ```python
-print(lora.version())        # this prints the sx127x chip version
+print(lora.get_version())        # this prints the sx127x chip version
 print(lora.get_freq())       # this prints the frequency setting 
 ```
 and setting registers is easy, too
