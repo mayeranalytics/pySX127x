@@ -76,7 +76,7 @@ def setter(register_address):
 
 class LoRa(object):
 
-    spi = BOARD.SpiDev()              # init and get the baord's SPI
+    spi = BOARD.SpiDev()              # init and get the board's SPI
     mode = None                       # the mode is backed up here
     backup_registers = []
     verbose = True
