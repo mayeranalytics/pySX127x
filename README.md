@@ -117,7 +117,7 @@ lora.set_coding_rate(CODING_RATE.CR4_6)     # set it to CR4_6
 
 Make sure SPI is activated on you RaspberryPi: [SPI](https://www.raspberrypi.com/documentation/computers/raspberry-pi.html#spi-overview)
 **pySX127x** requires these two python packages:
-* [RPi.GPIO](https://pypi.python.org/pypi/RPi.GPIO") for accessing the GPIOs, it should be already installed on
+* [RPi.GPIO](https://pypi.python.org/pypi/RPi.GPIO) for accessing the GPIOs, it should be already installed on
   a standard Raspian Linux image
 * [spidev](https://pypi.python.org/pypi/spidev) for controlling SPI
 
