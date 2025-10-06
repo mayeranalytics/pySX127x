@@ -254,15 +254,15 @@ The test coverage is rather low but we intend to change that soon.
 **pySX127x** is not entirely compatible with the 1272.
 The 1276 and 1272 chips are different and the interfaces not 100% identical. For example registers 0x26/27. 
 But the pySX127x library should get you pretty far if you use it with care. Here are the two datasheets:
-* [Semtech - SX1276/77/78/79 - 137 MHz to 1020 MHz Low Power Long Range Transceiver](https://semtech.my.salesforce.com/sfc/p/E0000000JelG/a/2R0000001Rbr/6EfVZUorrpoKFfvaF_Fkpgp5kzjiNyiAbqcpqh9qSjE)
-* [Semtech SX1272/73 - 860 MHz to 1020 MHz Low Power Long Range Transceiver](https://semtech.my.salesforce.com/sfc/p/E0000000JelG/a/440000001NCE/v_VBhk1IolDgxwwnOpcS_vTFxPfSEPQbuneK3mWsXlU)
+* [Semtech - SX1276/77/78/79 - 137 MHz to 1020 MHz Low Power Long Range Transceiver](https://www.semtech.com/products/wireless-rf/lora-connect)
+* [Semtech SX1272/73 - 860 MHz to 1020 MHz Low Power Long Range Transceiver](https://www.semtech.com/products/wireless-rf/lora-connect)
 
 ### HopeRF transceiver ICs ###
 HopeRF has a family of LoRa capable transceiver chips [RFM92/95/96/98](http://www.hoperf.com/)
 that have identical or almost identical SPI interface as the Semtech SX1276/7/8/9 family.
 
 ### Microchip transceiver IC ###
-Likewise Microchip has the chip [RN2483](http://ww1.microchip.com/downloads/en/DeviceDoc/50002346A.pdf)
+Likewise Microchip has the chip [RN2483](https://ww1.microchip.com/downloads/aemDocuments/documents/OTH/ProductDocuments/DataSheets/RN2483-Low-Power-Long-Range-LoRa-Technology-Transceiver-Module-DS50002346F.pdf)
 
 The [pySX127x](https://github.com/mayeranalytics/pySX127x) project will therefore be renamed to pyLoRa at some point.
 
@@ -275,9 +275,9 @@ By the way, LoRaWAN is what you need when you want to talk to the [TheThingsNetw
 # References
 
 ### Hardware references
-* [Semtech SX1276/77/78/79 - 137 MHz to 1020 MHz Low Power Long Range Transceiver](http://www.semtech.com/images/datasheet/sx1276_77_78_79.pdf)
+* [Semtech SX1276/77/78/79 - 137 MHz to 1020 MHz Low Power Long Range Transceiver](https://semtech.my.salesforce.com/sfc/p/#E0000000JelG/a/2R0000001Rbr/6EfVZUorrpoKFfvaF_Fkpgp5kzjiNyiAbqcpqh9qSjE)
 * [Modtronix inAir9](http://modtronix.com/inair9.html)
-* [Spidev Documentation](http://tightdev.net/SpiDev_Doc.pdf)
+* [Spidev Documentation](https://github.com/doceme/py-spidev)
 * [Make: Tutorial: Raspberry Pi GPIO Pins and Python](http://makezine.com/projects/tutorial-raspberry-pi-gpio-pins-and-python/)
 
 ### LoRa performance tests
